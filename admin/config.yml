@@ -1,0 +1,49 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "site-content"
+    label: "Site Content"
+    files:
+      - label: "Hero Section"
+        name: "hero"
+        file: "content/hero.json"
+        fields:
+          - { label: "Celebrant Name", name: "name", widget: "string", default: "ÁRÌKÉ" }
+          - { label: "Subtitle", name: "subtitle", widget: "string", default: "Happy Birthday" }
+          - { label: "Hero Image", name: "image", widget: "image", default: "arike-hero.png" }
+          - { label: "Description", name: "description", widget: "text" }
+
+      - label: "Birthday Letter"
+        name: "letter"
+        file: "content/letter.json"
+        fields:
+          - { label: "Letter Content", name: "body", widget: "markdown" }
+
+      - label: "Voice Note"
+        name: "voice"
+        file: "content/voice.json"
+        fields:
+          - { label: "Section Title", name: "title", widget: "string", default: "Things I Love About You" }
+          - { label: "Audio File", name: "audio", widget: "file" }
+
+      - label: "Video Carousel"
+        name: "carousel"
+        file: "content/carousel.json"
+        fields:
+          - label: "Videos"
+            name: "videos"
+            widget: "list"
+            field: { label: "Video", name: "video", widget: "file" }
+
+      - label: "From My Heart Video"
+        name: "heart"
+        file: "content/heart.json"
+        fields:
+          - { label: "Video File", name: "video", widget: "file" }
+          - { label: "Caption", name: "caption", widget: "string", default: "Just For You" }
+          
