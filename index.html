@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ÁRÌKÉ</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-raised: #1c1c1c;
+    --burgundy: #6b0f1a;
+    --burgundy-light: #8b1a2b;
+    --gold: #c9a227;
+    --gold-dim: #a08020;
+    --gold-glow: rgba(201,162,39,0.3);
+    --champagne: #f0e6d2;
+    --cream: #faf6ef;
+    --text-primary: #f5f5f5;
+    --text-secondary: #b8b0a0;
+    --text-muted: #6e6658;
+    --border: #2a2a2a;
+    --border-gold: rgba(201,162,39,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
+
+  /* ========== SURPRISE LANDING PAGE ========== */
+  #surprise-page {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #1a0a0f 0%, #0a0a0a 60%, #000 100%);
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+
+  #surprise-page.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  #particle-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .surprise-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+    animation: fadeInUp 1.2s ease-out;
+  }
+
+  .surprise-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    animation: pulse 2s infinite;
+  }
+
+  .surprise-title {
+    font-size: clamp(36px, 8vw, 80px);
+    font-weight: 300;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    color: var(--champagne);
+    line-height: 1.1;
+    text-shadow: 0 0 40px var(--gold-glow), 0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  .surprise-line {
+    width: 80px;
+    height: 2px;
+    background: var(--gold);
+    margin: 28px auto;
+    opacity: 0.7;
+    box-shadow: 0 0 10px var(--gold-glow);
+  }
+
+  .surprise-sub {
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+  }
+
+  .surprise-btn {
+    display: inline-block;
+    padding: 16px 48px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 50px;
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+  }
+
+  .surprise-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+
+  .surprise-btn:hover {
+    color: var(--bg);
+    box-shadow: 0 0 30px var(--gold-glow);
+  }
+
+  .surprise-btn:hover::before {
+    transform: scaleX(1);
+  }
+
+  /* ========== MAIN PAGE ========== */
+  #main-page {
+    opacity: 0;
+    transition: opacity 1s ease 0.3s;
+  }
+
+  #main-page.visible {
+    opacity: 1;
+  }
+
+  /* Navigation */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 18px 24px;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.4s ease;
+  }
+
+  nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 50%;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  nav a:hover { color: var(--gold); }
+  nav a:hover::after { width: 100%; }
+
+  /* Hero Section */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('arike-hero.png') center center / cover no-repeat;
+    filter: brightness(0.3) saturate(1.2);
+    z-index: 0;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(107,15,26,0.5) 0%,
+      rgba(10,10,10,0.7) 50%,
+      rgba(10,10,10,0.95) 100%
+    );
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px;
+    max-width: 800px;
+    animation: fadeInUp 1.2s ease-out;
+  }
+
+  .hero-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .hero-name {
+    font-size: clamp(48px, 10vw, 96px);
+    font-weight: 300;
+    letter-spacing: 16px;
+    text-transform: uppercase;
+    color: var(--champagne);
+    line-height: 1.05;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  }
+
+  .hero-line {
+    width: 100px;
+    height: 2px;
+    background: var(--gold);
+    margin: 28px auto;
+    opacity: 0.6;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .hero-desc {
+    margin-top: 24px;
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Section Styling */
+  section {
+    width: 100%;
+    padding: 100px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--champagne);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 500px;
+    margin-bottom: 48px;
+    line-height: 1.6;
+  }
+
+  /* ========== ENVELOPE LETTER SECTION ========== */
+  .letter-section {
+    background: linear-gradient(180deg, var(--bg) 0%, #11080a 50%, var(--bg) 100%);
+    padding: 80px 24px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .envelope-container {
+    perspective: 1200px;
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+  }
+
+  .envelope {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.6 / 1;
+    background: linear-gradient(145deg, #8b1a2b 0%, #6b0f1a 50%, #4a0a12 100%);
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
+  }
+
+  .envelope:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 70px rgba(0,0,0,0.7), 0 0 40px rgba(201,162,39,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .envelope-flap {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(180deg, #9b1e30 0%, #7a1320 100%);
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 3;
+    box-shadow: inset 0 -1px 2px rgba(0,0,0,0.2);
+  }
+
+  .envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+  }
+
+  .envelope-body {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #7a1320 0%, #5a0e18 100%);
+    border-radius: 4px;
+    z-index: 2;
+  }
+
+  .envelope-pocket {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(180deg, #6b0f1a 0%, #4a0a12 100%);
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    z-index: 4;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .envelope-seal {
+    position: absolute;
+    top: 42%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #d4af37 0%, #b8941f 40%, #8a6d12 100%);
+    border: 3px solid #a08020;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    transition: all 0.4s ease;
+  }
+
+  .envelope:hover .envelope-seal {
+    box-shadow: 0 4px 20px rgba(201,162,39,0.3), inset 0 1px 2px rgba(255,255,255,0.3);
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+
+  .envelope-seal-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #3a2505;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .envelope-letter {
+    position: absolute;
+    top: 10%; left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    height: 85%;
+    background: linear-gradient(180deg, #faf6ef 0%, #f0e6d2 100%);
+    border-radius: 3px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 2;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .envelope.open .envelope-letter {
+    top: -20%;
+    transform: translateX(-50%) scale(1.05);
+    height: auto;
+    min-height: 400px;
+    z-index: 10;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+
+  .letter-content {
+    padding: 32px 28px;
+    color: #2a1f15;
+    font-size: 14px;
+    line-height: 1.9;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.6s ease 0.3s;
+  }
+
+  .envelope.open .letter-content {
+    max-height: 2000px;
+    opacity: 1;
+    overflow-y: auto;
+  }
+
+  .letter-content::-webkit-scrollbar { width: 4px; }
+  .letter-content::-webkit-scrollbar-track { background: transparent; }
+  .letter-content::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+  .letter-content h2 {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6b0f1a;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .letter-content p {
+    margin-bottom: 16px;
+    text-align: justify;
+    text-align-last: left;
+  }
+
+  .letter-content .closing {
+    margin-top: 24px;
+    text-align: center;
+    font-style: italic;
+    color: #6b0f1a;
+    font-weight: 500;
+  }
+
+  .letter-hint {
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: opacity 0.3s;
+  }
+
+  .envelope.open + .letter-hint,
+  .envelope-container.open .letter-hint {
+    opacity: 0;
+  }
+
+  /* ========== LETTER MODAL OVERLAY ========== */
+  .letter-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease;
+  }
+
+  .letter-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .letter-modal {
+    width: 100%;
+    max-width: 680px;
+    max-height: 85vh;
+    background: linear-gradient(180deg, #faf6ef 0%, #f0e6d2 100%);
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(201,162,39,0.1);
+    overflow: hidden;
+    position: relative;
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .letter-modal-overlay.active .letter-modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .letter-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(107,15,26,0.3);
+    background: rgba(255,255,255,0.8);
+    color: #6b0f1a;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .letter-modal-close:hover {
+    background: #6b0f1a;
+    color: #faf6ef;
+    border-color: #6b0f1a;
+  }
+
+  .letter-modal-content {
+    padding: 48px 36px;
+    color: #2a1f15;
+    font-size: 15px;
+    line-height: 2;
+    overflow-y: auto;
+    max-height: 85vh;
+  }
+
+  .letter-modal-content::-webkit-scrollbar { width: 6px; }
+  .letter-modal-content::-webkit-scrollbar-track { background: transparent; }
+  .letter-modal-content::-webkit-scrollbar-thumb { background: #c9a227; border-radius: 3px; }
+
+  .letter-modal-content h2 {
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #6b0f1a;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .letter-modal-content p {
+    margin-bottom: 18px;
+    text-align: justify;
+    text-align-last: left;
+  }
+
+  .letter-modal-content .closing {
+    margin-top: 32px;
+    text-align: center;
+    font-style: italic;
+    color: #6b0f1a;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .letter-modal-content .signature {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #8b6914;
+    letter-spacing: 2px;
+  }
+
+  /* ========== SOUND RECORDING SECTION ========== */
+  .sound-section {
+    background: linear-gradient(180deg, var(--bg) 0%, #0f080a 100%);
+    padding: 100px 24px;
+  }
+
+  .sound-card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  .sound-visual {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #1a0a0f 0%, #0a0a0a 50%, #140a0c 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sound-wave {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 60px;
+  }
+
+  .sound-wave span {
+    width: 4px;
+    background: var(--gold);
+    border-radius: 2px;
+    opacity: 0.6;
+    animation: soundWave 1.2s ease-in-out infinite;
+  }
+
+  .sound-wave span:nth-child(1) { height: 20px; animation-delay: 0s; }
+  .sound-wave span:nth-child(2) { height: 40px; animation-delay: 0.1s; }
+  .sound-wave span:nth-child(3) { height: 55px; animation-delay: 0.2s; }
+  .sound-wave span:nth-child(4) { height: 35px; animation-delay: 0.3s; }
+  .sound-wave span:nth-child(5) { height: 50px; animation-delay: 0.15s; }
+  .sound-wave span:nth-child(6) { height: 25px; animation-delay: 0.25s; }
+  .sound-wave span:nth-child(7) { height: 45px; animation-delay: 0.05s; }
+  .sound-wave span:nth-child(8) { height: 30px; animation-delay: 0.35s; }
+  .sound-wave span:nth-child(9) { height: 55px; animation-delay: 0.2s; }
+  .sound-wave span:nth-child(10) { height: 20px; animation-delay: 0.1s; }
+  .sound-wave span:nth-child(11) { height: 40px; animation-delay: 0.3s; }
+  .sound-wave span:nth-child(12) { height: 50px; animation-delay: 0.15s; }
+
+  @keyframes soundWave {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
+    50% { transform: scaleY(1); opacity: 0.9; }
+  }
+
+  .sound-visual-label {
+    position: absolute;
+    bottom: 16px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .sound-body {
+    padding: 32px;
+    text-align: center;
+  }
+
+  .sound-body h3 {
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--champagne);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .audio-player {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .audio-player audio {
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  .audio-player audio::-webkit-media-controls-panel {
+    background: var(--surface);
+  }
+
+  .audio-player audio::-webkit-media-controls-enclosure {
+    background: var(--surface);
+    border-radius: 8px;
+  }
+
+  .audio-placeholder {
+    padding: 20px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  /* ========== CAROUSEL SECTION ========== */
+  .carousel-section {
+    background: var(--bg);
+  }
+
+  .carousel-container {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+  }
+
+  .carousel-frame {
+    width: 100%;
+    aspect-ratio: 9/16;
+    max-height: 640px;
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .carousel-frame video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+  }
+
+  .carousel-frame video.active {
+    opacity: 1;
+  }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .carousel-dots button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: var(--border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .carousel-dots button.active {
+    background: var(--gold);
+    transform: scale(1.3);
+  }
+
+  .carousel-timer {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  .carousel-timer-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.1s linear;
+  }
+
+  /* ========== FROM MY HEART SECTION ========== */
+  .heart-section {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+  }
+
+  .heart-card {
+    width: 100%;
+    max-width: 640px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    text-align: center;
+  }
+
+  .heart-media {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, var(--surface) 0%, #1a0f12 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .heart-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .heart-body {
+    padding: 36px 32px;
+  }
+
+  .heart-body h3 {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--champagne);
+    margin-bottom: 10px;
+  }
+
+  .heart-body p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    padding: 48px 24px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  footer p {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .gold-heart { color: var(--gold); }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    nav { gap: 20px; padding: 14px 16px; }
+    nav a { font-size: 10px; letter-spacing: 2px; }
+    section { padding: 64px 16px; }
+    .hero-name { letter-spacing: 8px; }
+    .letter-modal-content { padding: 32px 20px; font-size: 14px; }
+    .envelope-seal { width: 64px; height: 64px; }
+    .envelope-seal-text { font-size: 9px; letter-spacing: 1px; }
+    .carousel-container { max-width: 300px; }
+    .sound-body h3 { font-size: 14px; }
+    .letter-section { min-height: auto; padding: 60px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SURPRISE LANDING PAGE ========== -->
+<div id="surprise-page">
+  <canvas id="particle-canvas"></canvas>
+  <div class="surprise-content">
+    <div class="surprise-label">Get Ready</div>
+    <h1 class="surprise-title">Happy Birthday</h1>
+    <div class="surprise-line"></div>
+    <div class="surprise-sub">Something beautiful awaits</div>
+    <button class="surprise-btn" onclick="enterMain()">Surprise</button>
+  </div>
+</div>
+
+<!-- ========== MAIN PAGE ========== -->
+<div id="main-page">
+
+<nav>
+  <a href="#hero">Home</a>
+  <a href="#letter">Letter</a>
+  <a href="#sound">Voice</a>
+  <a href="#moments">Moments</a>
+  <a href="#heart">Heart</a>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-label">Celebrating</div>
+    <h1 class="hero-name">ÁRÌKÉ</h1>
+    <div class="hero-line"></div>
+    <div class="hero-sub">Happy Birthday</div>
+    <p class="hero-desc">
+      A soul as radiant as gold, as deep as burgundy wine. Today we celebrate the beauty, grace, and light that is you.
+    </p>
+  </div>
+</section>
+
+<!-- Envelope Letter Section -->
+<section class="letter-section" id="letter">
+  <div class="section-label reveal">A Message</div>
+  <h2 class="section-title reveal">Sealed With Love</h2>
+  <p class="section-desc reveal">Click the envelope to open what is written for you.</p>
+
+  <div class="envelope-container reveal" id="envelopeContainer">
+    <div class="envelope" id="envelope" onclick="openLetterModal()">
+      <div class="envelope-body"></div>
+      <div class="envelope-flap"></div>
+      <div class="envelope-pocket"></div>
+      <div class="envelope-seal">
+        <div class="envelope-seal-text">For<br>You</div>
+      </div>
+    </div>
+    <div class="letter-hint">Click to open</div>
+  </div>
+</section>
+
+<!-- Letter Modal Overlay -->
+<div class="letter-modal-overlay" id="letterModal" onclick="closeLetterModal(event)">
+  <div class="letter-modal" onclick="event.stopPropagation()">
+    <button class="letter-modal-close" onclick="closeLetterModal()">&times;</button>
+    <div class="letter-modal-content">
+      <h2>Happy Birthday, my love. ❤️</h2>
+      <p>Today isn't just another day on the calendar. Today is the day someone incredibly beautiful came into this world, and whether you realize it or not, your existence has changed mine forever. I honestly don't think words will ever be enough to explain what you mean to me, but today I'll try, because someone as special as you deserves to know just how much they are loved and appreciated.</p>
+      <p>When I look back at everything we've shared, I don't just remember the happy moments. I remember the difficult conversations, the misunderstandings, the times we didn't know what to say, the moments we were both frustrated, and even the days when life itself made everything feel heavier than it should have. Through all of that, one thing has remained true—you have been one of the most meaningful people in my life. Loving you hasn't always been easy, but it has always been worth it. Every challenge we've faced has reminded me that real love isn't about perfection; it's about choosing each other even when things aren't perfect.</p>
+      <p>I want you to know how much I appreciate you. Thank you for your kindness, your patience, your smile, your laughter, your little habits, your care, and even the parts of you that you probably think aren't enough. Thank you for allowing me into your life and for trusting me with your heart. Thank you for every conversation we've had, every moment we've laughed until nothing else mattered, every lesson you've taught me without even realizing it, and every memory we've created together. You've made my life brighter simply by being yourself.</p>
+      <p>As you begin this new chapter, my prayer is that God continues to guide every step you take. I pray He surrounds you with peace that doesn't depend on circumstances, joy that never runs dry, wisdom for every decision, strength for every challenge, and favor that opens doors no one can shut. I pray your dreams become reality one after another. I pray you never lose your beautiful heart, your compassion, or the light you carry within you. May this year bring opportunities you've prayed for, blessings you never expected, and testimonies that leave you speechless.</p>
+      <p>I also pray that whenever life becomes difficult, you'll always remember how valuable you are. I hope you never allow fear, disappointment, or the opinions of people to make you question your worth. You are stronger than you know, more beautiful than you see, and capable of accomplishing so much more than you sometimes believe. I hope this new age gives you the confidence to walk boldly into everything God has prepared for you.</p>
+      <p>There are so many things I admire about you that I could probably spend all day writing and still not finish. I admire your heart. I admire your resilience. I admire your ability to keep going even when life isn't easy. I admire the woman you're becoming. Every day you continue to grow, and it's such a beautiful thing to witness. Watching you become a better version of yourself inspires me to become a better man too.</p>
+      <p>If there's one thing I want you to remember today, it's this: you are deeply loved. Not because of what you can do, not because of what you have, not because you're perfect, but simply because you're you. The world is genuinely better because you're in it. Never forget that. Never underestimate the impact your presence has on the people who truly know and love you.</p>
+      <p>I know none of us can see what tomorrow holds, but today I choose gratitude. I'm grateful that our paths crossed. I'm grateful for every memory we've shared and every lesson we've learned together. I'm grateful that I get to celebrate another year of your life. No birthday gift could ever fully express how thankful I am that God created someone like you.</p>
+      <p>So today, laugh until your cheeks hurt. Smile without holding back. Eat your favorite food. Take pictures. Dance if you want to. Let yourself feel celebrated because you deserve every bit of it. Today is about you, and I hope every person around you reminds you of how precious you are.</p>
+      <p>Happy Birthday once again, my beautiful Ariké.</p>
+      <p>May this new year of your life be filled with endless happiness, overflowing love, divine protection, countless victories, good health, and unforgettable moments. May God bless the work of your hands, preserve your life, grant you the desires of your heart according to His will, and keep you smiling for many years to come.</p>
+      <p>Thank you for being you.</p>
+      <p>I love you more than these words could ever explain.</p>
+      <p class="closing">Happy Birthday, my love. ❤️</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sound Recording Section -->
+<section class="sound-section" id="sound">
+  <div class="section-label reveal">Listen</div>
+  <h2 class="section-title reveal">A Time You Asked Me</h2>
+  <p class="section-desc reveal">To tell you things I loved about you</p>
+
+  <div class="sound-card reveal">
+    <div class="sound-visual">
+      <div class="sound-wave">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span>
+      </div>
+      <div class="sound-visual-label">Voice Note</div>
+    </div>
+    <div class="sound-body">
+      <h3>Things I Love About You</h3>
+      <div class="audio-player">
+        <!-- Replace 'voice-note.mp3' with your actual audio file name -->
+        <audio controls preload="metadata">
+          <source src="voice-note.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video Carousel Section -->
+<section class="carousel-section" id="moments">
+  <div class="section-label reveal">The Collection</div>
+  <h2 class="section-title reveal">Moments in Motion</h2>
+  <p class="section-desc reveal">
+    A carousel of memories, each frame capturing a different shade of your beautiful spirit.
+  </p>
+
+  <div class="carousel-container reveal">
+    <div class="carousel-frame">
+      <video class="active" src="carousel-1.mp4" muted playsinline loop preload="metadata"></video>
+      <video src="carousel-2.mp4" muted playsinline loop preload="metadata"></video>
+      <video src="carousel-3.mp4" muted playsinline loop preload="metadata"></video>
+      <video src="wish.mp4" muted playsinline loop preload="metadata"></video>
+      <div class="carousel-timer">
+        <div class="carousel-timer-bar" id="timerBar"></div>
+      </div>
+    </div>
+    <div class="carousel-dots">
+      <button class="active" onclick="goToSlide(0)"></button>
+      <button onclick="goToSlide(1)"></button>
+      <button onclick="goToSlide(2)"></button>
+      <button onclick="goToSlide(3)"></button>
+    </div>
+  </div>
+</section>
+
+<!-- From My Heart Section -->
+<section class="heart-section" id="heart">
+  <div class="section-label reveal">From Me</div>
+  <h2 class="section-title reveal">From My Heart</h2>
+  <p class="section-desc reveal">
+    A message recorded just for you.
+  </p>
+
+  <div class="heart-card reveal">
+    <div class="heart-media">
+      <!-- Replace 'personal-wish.mp4' with your actual personal video file name -->
+      <video controls playsinline preload="metadata" poster="">
+        <source src="personal-wish.mp4" type="video/mp4">
+        Your browser does not support the video element.
+      </video>
+    </div>
+    <div class="heart-body">
+      <h3>Just For You</h3>
+      <p>Every word, every moment, every heartbeat — dedicated to celebrating you.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Made with <span class="gold-heart">♥</span> for ÁRÌKÉ · 2026</p>
+</footer>
+
+</div><!-- /main-page -->
+
+<script>
+  // ========== SURPRISE PAGE PARTICLES ==========
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animationId;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 3 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 1.5;
+      this.speedY = (Math.random() - 0.5) * 1.5;
+      this.opacity = Math.random() * 0.8 + 0.2;
+      this.gold = Math.random() > 0.3;
+      this.life = Math.random() * 200 + 100;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.life--;
+      if (this.life <= 0 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      if (this.gold) {
+        ctx.fillStyle = `rgba(201,162,39,${this.opacity})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = 'rgba(201,162,39,0.5)';
+      } else {
+        ctx.fillStyle = `rgba(240,230,210,${this.opacity * 0.4})`;
+        ctx.shadowBlur = 0;
+      }
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    animationId = requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  // ========== ENTER MAIN PAGE ==========
+  function enterMain() {
+    document.getElementById('surprise-page').classList.add('hidden');
+    document.getElementById('main-page').classList.add('visible');
+    cancelAnimationFrame(animationId);
+    videos[0].play().catch(() => {});
+    resetTimer();
+  }
+
+  // ========== LETTER MODAL ==========
+  function openLetterModal() {
+    document.getElementById('letterModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLetterModal(e) {
+    if (!e || e.target === document.getElementById('letterModal')) {
+      document.getElementById('letterModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // ========== CAROUSEL ==========
+  const videos = document.querySelectorAll('.carousel-frame video');
+  const dots = document.querySelectorAll('.carousel-dots button');
+  const timerBar = document.getElementById('timerBar');
+  let currentSlide = 0;
+  const intervalTime = 5000;
+  let timerInterval;
+
+  function showSlide(index) {
+    videos.forEach((v, i) => {
+      v.classList.toggle('active', i === index);
+      if (i === index) {
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+        v.currentTime = 0;
+      }
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    currentSlide = index;
+    resetTimer();
+  }
+
+  function nextSlide() {
+    showSlide((currentSlide + 1) % videos.length);
+  }
+
+  function goToSlide(index) {
+    showSlide(index);
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerBar.style.transition = 'none';
+    timerBar.style.width = '0%';
+    setTimeout(() => {
+      timerBar.style.transition = `width ${intervalTime}ms linear`;
+      timerBar.style.width = '100%';
+    }, 50);
+    timerInterval = setInterval(nextSlide, intervalTime);
+  }
+
+  // ========== SCROLL REVEAL ==========
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // ========== NAV SCROLL ==========
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      nav.style.background = 'rgba(10,10,10,0.95)';
+      nav.style.borderBottom = '1px solid rgba(201,162,39,0.2)';
+    } else {
+      nav.style.background = 'rgba(10,10,10,0.9)';
+      nav.style.borderBottom = '1px solid var(--border)';
+    }
+  });
+</script>
+
+</body>
+</html>
