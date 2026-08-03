@@ -10,6 +10,11 @@
         });
       }
     });
+    
+    // FIX: Explicitly open signup when invite token is in URL
+    if (document.location.hash && document.location.hash.includes('invite_token')) {
+      window.netlifyIdentity.open('signup');
+    }
   }
 </script>
 <meta charset="UTF-8">
